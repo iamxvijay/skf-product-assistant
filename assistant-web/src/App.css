@@ -1,0 +1,165 @@
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100vw;
+  background: transparent;
+}
+
+.header {
+  width: 100%;
+  padding: 0.7rem 0;
+  font-size: 1.13rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  background: transparent;
+  color: #222;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0.5rem;
+}
+
+.chat-main {
+  width: 100%;
+  max-width: 630px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: transparent;
+}
+
+.chat-history {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.38rem;
+  min-height: 120px;
+  padding-bottom: 1rem;
+}
+
+.chat-msg {
+  display: flex;
+  width: 100%;
+}
+
+.chat-msg.user {
+  justify-content: flex-end;
+}
+
+.chat-msg.assistant {
+  justify-content: flex-start;
+}
+
+.bubble {
+  padding: 0.7em 1em;
+  font-size: 0.94rem;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-radius: 0px;
+  box-shadow: none;
+  border: 1px solid #ececec;
+  background: #fff;
+  margin: 0.13em 0;
+}
+
+.chat-msg.user .bubble {
+  color: #234f77;
+  background: transparent;
+  border: none;
+  min-width: 70px;
+  max-width: 66%;
+  text-align: left;      /* <-- Make text inside bubble left-aligned */
+  box-shadow: none;
+  display: inline-block; /* <-- Ensures proper right-aligned bubble */
+}
+
+
+
+.chat-msg.assistant .bubble {
+  color: #444;
+  background: #fff;
+  border: none;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+}
+
+.placeholder {
+  color: #aaa;
+  font-size: 0.97em;
+  margin: 1em auto;
+  text-align: center;
+}
+
+.chat-footer {
+  width: 100%;
+  max-width: 630px;
+  padding: 0.7rem 0;
+  background: transparent;
+  border-top: 1px solid #eee;
+  box-shadow: none;
+  margin-bottom: 1.5rem;
+}
+
+.input-area {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;      /* Change from center to flex-end */
+  gap: 0.5em;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 580px;           /* Set max-width same as textarea */
+}
+
+.input-area textarea {
+  border-radius: 7px;
+  border: 1.5px solid #bfcbe4;
+  padding: 0.8em;
+  resize: none;
+  font-size: 0.94rem;    /* Match chat message size */
+  font-family: inherit;   /* Match the rest of the app */
+  outline: none;
+  min-height: 62px;       /* Was 38px, now more room for 2 lines */
+  background: #fff;
+  box-shadow: none;
+  margin-bottom: 0.3em;
+  margin-top: 0.1em;
+  width: 100%;
+  max-width: 580px;
+}
+
+
+.input-area button {
+  margin-top: 0.1em;
+}
+
+.input-area button:disabled {
+  background: #fafbfc;
+  color: #bfcbe4;
+  border-color: #d8deeb;
+  cursor: not-allowed;
+}
+
+.footer-note {
+  margin-top: 0.2em;
+  color: #bbb;
+  font-size: 0.81em;
+  letter-spacing: 0.01em;
+  text-align: right;             /* Change from right to left */
+  width: 100%;                  /* Align with textarea width */
+  max-width: 580px;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "Lk7PL9Ra1iKToz5ICmftFST6OhxTgA0Jip5UVovhyGc=",
+  "Source": "assistant-api",
+  "BasePath": "_content/assistant-api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
