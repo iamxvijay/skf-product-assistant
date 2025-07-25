@@ -1,6 +1,8 @@
 using assistant_api.Services;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using StackExchange.Redis;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,14 +12,15 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = builder.Configuration["Redis:ConnectionString"];
 });
 
-// HttpClient with Bearer token for OpenAI
+// HttpClient for Azure OpenAI (api-key in header)
 builder.Services.AddHttpClient("openai", client =>
 {
     var apiKey = builder.Configuration["OpenAI:ApiKey"];
     if (!string.IsNullOrWhiteSpace(apiKey))
     {
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+        client.DefaultRequestHeaders.Add("api-key", apiKey); // Azure OpenAI uses api-key header!
     }
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
 // App services
@@ -26,17 +29,31 @@ builder.Services.AddSingleton<LLMHelix>();
 builder.Services.AddSingleton<LLMSpectro>();
 builder.Services.AddSingleton<ChatHistoryService>();
 
-// Enable CORS (allow any origin, header, method)
+// Enable CORS (allow only your origins, no trailing slash)
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://azureapp:54436", "http://localhost:54436")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+            "https://skf-assistant-web-a6fdardwh2dkemag.southindia-01.azurewebsites.net",
+            "http://localhost:54436")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithExposedHeaders("x-session-id");
     });
 });
 
+// === Add Rate Limiting ===
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("fixed", o =>
+    {
+        o.PermitLimit = 10; // 10 requests
+        o.Window = TimeSpan.FromMinutes(1); // per minute
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0; // No queueing
+    });
+});
 
 // Add controllers, swagger
 builder.Services.AddControllers();
@@ -53,7 +70,9 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection(); // Uncomment if using HTTPS
 
-app.UseCors();         // <---- Enable CORS globally
+app.UseCors();         // Enable CORS globally
+
+app.UseRateLimiter();  // <-- Add this after CORS, before Auth
 
 app.UseAuthorization();
 
