@@ -25,8 +25,6 @@ namespace assistant_api.Services
             _model = config["OpenAI:HelixModel"] ?? "gpt-4o-mini";
 
             var endpointTemplate = config["OpenAI:Endpoint"];
-            if (string.IsNullOrWhiteSpace(endpointTemplate))
-                endpointTemplate = "https://skf-openai-dev-eval.openai.azure.com/openai/deployments/{MODEL}/chat/completions?api-version=2024-08-01-preview";
             _endpoint = endpointTemplate.Replace("{MODEL}", _model);
         }
 
